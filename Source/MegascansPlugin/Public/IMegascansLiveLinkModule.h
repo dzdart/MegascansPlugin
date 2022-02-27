@@ -23,5 +23,7 @@ public:
 	{
 		return FModuleManager::Get().IsModuleLoaded(MS_MODULE_NAME);
 	}
+
 };
+
 

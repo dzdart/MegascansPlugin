@@ -5,6 +5,7 @@
 #include "UI/MSSettings.h"
 #include "Runtime/Core/Public/GenericPlatform/GenericPlatformFile.h"
 #include "Runtime/Core/Public/Misc/Paths.h"
+#include "LevelEditor.h"
 
 
 
@@ -29,8 +30,10 @@ public:
 		PropertyModule.NotifyCustomizationModuleChanged();
 	}
 
+
+
 	void CopyMat() {
-		//¸´ÖÆMSPÄ¿Â¼µ½ÏîÄ¿µÄMSPÄ¿Â¼ÏÂ
+		//å¤åˆ¶MSPç›®å½•åˆ°é¡¹ç›®çš„MSPç›®å½•ä¸‹
 		const FString bridge_dir = L"MegascansPlugin/Content/MSPresets";
 		const FString engine_plugin_content = FPaths::Combine(FPaths::EnginePluginsDir(),bridge_dir);
 		const FString project_plugin_content = FPaths::Combine(FPaths::ProjectPluginsDir(),bridge_dir);

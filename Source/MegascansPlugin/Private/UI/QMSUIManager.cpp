@@ -15,7 +15,7 @@
 #include "MSPythonBridge.h"
 #include "TCPServerImp.h"
 #include "UI/SMSWindow.h"
-
+#include "LevelEditor.h"
 
 #define LOCTEXT_NAMESPACE "QMSLiveLink"
 #define LEVELEDITOR_MODULE_NAME TEXT("LevelEditor")
@@ -29,10 +29,16 @@ public:
 	void Initialize();
 	void Shutdown();
 	void JsonReceived(FString message);
+	void CreateWIndow();
+	void CreateMenu();
+	void AddMenuBarExtension(FMenuBarBuilder& Builder);
+	void MenuBarPullDown(FMenuBuilder& Builder);
 
 private:
 	void SetupMenuItem();
-	void CreateWIndow();
+	
+
+	
 	FTCPServer *tcpServer = NULL;	
 	void FillToolbar(FToolBarBuilder& ToolbarBuilder);
 };
@@ -46,11 +52,42 @@ void FQMSUIManager::Initialize()
 	}	
 }
 
+
+void FQMSUIManagerImpl::CreateMenu() {
+	FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked<FLevelEditorModule>("LevelEditor");
+	//¶¥²¿²Ëµ¥
+	TSharedPtr<FExtender> MenuBarExtender = MakeShareable(new FExtender());
+	MenuBarExtender->AddMenuBarExtension("Help",
+		EExtensionHook::After, nullptr, FMenuBarExtensionDelegate::CreateRaw(this, &FQMSUIManagerImpl::AddMenuBarExtension));
+	LevelEditorModule.GetMenuExtensibilityManager()->AddExtender(MenuBarExtender);
+}
+void FQMSUIManagerImpl::AddMenuBarExtension(FMenuBarBuilder& Builder)
+{
+	Builder.AddPullDownMenu(
+		LOCTEXT("PullMenu", "Bridge"),
+		LOCTEXT("PullMenu Tips", "Bridge Menu"),
+		FNewMenuDelegate::CreateRaw(this, &FQMSUIManagerImpl::MenuBarPullDown)
+
+	);
+}
+void FQMSUIManagerImpl::MenuBarPullDown(FMenuBuilder& Builder) {
+	Builder.AddMenuEntry(FText::FromString("Setting"),
+		FText::FromString("Settings"),
+		FSlateIcon(),
+		FUIAction(FExecuteAction::CreateRaw(this,&FQMSUIManagerImpl::CreateWIndow))
+	);
+
+
+}
+
+
+
 void FQMSUIManagerImpl::Initialize()
 {
 	FMSStyle::Initialize();
 
-	SetupMenuItem();
+	//SetupMenuItem();
+	CreateMenu();
 	if (tcpServer == NULL)
 	{
 		tcpServer = new FTCPServer();
