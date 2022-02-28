@@ -42,15 +42,18 @@ public:
 	/** Only import textures that are supported by the selected Master Material for the asset type. */
 	UPROPERTY(Config, DisplayName = "Import Master Material Textures", EditAnywhere, Category = "MegascansSettings")
 		bool bFilterMasterMaterialMaps;
+	UPROPERTY(Config, DisplayName = "导入Nanite模型", EditAnywhere, Category = "MegascansSettings")
+		bool bUseNanite;
+
 	
 	/** Flip Green Channel of Normal maps upon import. */
 	/*
 	UPROPERTY(Config, DisplayName = "Flip Normal Map Green Channel", EditAnywhere, Category = "MegascansSettings")
 		bool bFlipNormalGreenChannel;
 	*/
-
-
-
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyThatWillChange) override;
+#endif
 };
 
 UCLASS(Config = Editor)
@@ -115,6 +118,7 @@ public:
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyThatWillChange) override;
+	
 #endif
 
 };

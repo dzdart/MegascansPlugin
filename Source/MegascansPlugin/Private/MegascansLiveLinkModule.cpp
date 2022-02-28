@@ -16,7 +16,7 @@ class FQMSLiveLinkModule : public IMegascansLiveLinkModule
 public:
 	virtual void StartupModule() override
 	{
-		FQMSLiveLinkModule::CopyMat();
+		
 		if (GIsEditor && !IsRunningCommandlet())
 		{
 			 FQMSUIManager::Initialize();
@@ -28,6 +28,7 @@ public:
 			FOnGetDetailCustomizationInstance::CreateStatic(&BlendSettingsCustomization::MakeInstance)
 		);
 		PropertyModule.NotifyCustomizationModuleChanged();
+		FQMSLiveLinkModule::CopyMat();
 	}
 
 
@@ -42,11 +43,11 @@ public:
 		IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 		if (FPaths::DirectoryExists(engine_plugin_content))
 		{
-			PlatformFile.CopyDirectoryTree(*project_MSP, *engine_plugin_content,true);
+			PlatformFile.CopyDirectoryTree(*project_MSP, *engine_plugin_content,false);
 		}
 		else if (FPaths::DirectoryExists(project_plugin_content))
 		{
-			PlatformFile.CopyDirectoryTree(*project_MSP, *project_plugin_content, true);
+			PlatformFile.CopyDirectoryTree(*project_MSP, *project_plugin_content, false);
 		}
 	}
 

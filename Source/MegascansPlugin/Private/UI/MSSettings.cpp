@@ -45,6 +45,10 @@ void UMaterialPresetsSettings::PostEditChangeProperty(FPropertyChangedEvent& Pro
 	UE_LOG(LogTemp, Error, TEXT("Surface override saved : %s"), *MatOverridePathSettings->MasterMaterialSurface);
 
 }
+void UMegascansSettings::PostEditChangeProperty(FPropertyChangedEvent& PropertyThatWillChange) {
+	UMegascansSettings* Config= GetMutableDefault<UMegascansSettings>();
+	Config->SaveConfig();
+	}
 
 #endif
 

@@ -19,7 +19,7 @@
 #include "Runtime/Foliage/Public/FoliageType_InstancedStaticMesh.h"
 #include "Runtime/AssetRegistry/Public/AssetRegistryModule.h"
 #include "PerPlatformProperties.h"
-
+#include "UI/MSSettings.h"
 
 
 
@@ -43,7 +43,7 @@ FString FMeshOps::ImportMesh(const FString& MeshPath, const FString& Destination
 
 	//UFbxImportUI* ImportOptions;
 	MeshPath.Split(TEXT("."), &FilePath, &FileExtension);
-	
+	const UMegascansSettings* MegascansSettings = GetDefault<UMegascansSettings>();
 
 	FileExtension = FPaths::GetExtension(MeshPath);
 	if (FileExtension == TEXT("obj") || FileExtension == TEXT("fbx"))
@@ -63,6 +63,12 @@ FString FMeshOps::ImportMesh(const FString& MeshPath, const FString& Destination
 		UAbcImportSettings* AbcImportOptions = GetAbcSettings();
 		AssetPath = ImportFile(AbcImportOptions, Destination, AssetName, MeshPath);
 
+	}
+	//根据地址关键词判断是否是植被，如果不是就启用Nanite
+	if(!AssetPath.Find("3dPlants")){
+		UStaticMesh* ImportedScatter = CastChecked<UStaticMesh>(UEditorAssetLibrary::LoadAsset(AssetPath));
+		ImportedScatter->NaniteSettings.bEnabled = 1;
+		ImportedScatter->PostEditChange();
 	}
 	return AssetPath;
 }
