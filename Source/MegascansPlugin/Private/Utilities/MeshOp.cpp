@@ -65,10 +65,11 @@ FString FMeshOps::ImportMesh(const FString& MeshPath, const FString& Destination
 
 	}
 	//根据地址关键词判断是否是植被，如果不是就启用Nanite
-	if(!AssetPath.Find("3dPlants")){
+	if(!AssetPath.Find("3dPlants") || MegascansSettings->bUseNanite){
 		UStaticMesh* ImportedScatter = CastChecked<UStaticMesh>(UEditorAssetLibrary::LoadAsset(AssetPath));
 		ImportedScatter->NaniteSettings.bEnabled = 1;
 		ImportedScatter->PostEditChange();
+
 	}
 	return AssetPath;
 }

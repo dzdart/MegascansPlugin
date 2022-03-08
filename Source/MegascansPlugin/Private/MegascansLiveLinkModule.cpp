@@ -6,6 +6,7 @@
 #include "Runtime/Core/Public/GenericPlatform/GenericPlatformFile.h"
 #include "Runtime/Core/Public/Misc/Paths.h"
 #include "LevelEditor.h"
+#include "Modules/ModuleManager.h"
 
 
 
@@ -33,22 +34,13 @@ public:
 
 
 
+
 	void CopyMat() {
 		//复制MSP目录到项目的MSP目录下
-		const FString bridge_dir = L"MegascansPlugin/Content/MSPresets";
-		const FString engine_plugin_content = FPaths::Combine(FPaths::EnginePluginsDir(),bridge_dir);
-		const FString project_plugin_content = FPaths::Combine(FPaths::ProjectPluginsDir(),bridge_dir);
-		const FString project_MSP = FPaths::Combine(FPaths::ProjectContentDir(),L"MSPresets");
-		//IPlatformFile::CopyDirectoryTree();
-		IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
-		if (FPaths::DirectoryExists(engine_plugin_content))
-		{
-			PlatformFile.CopyDirectoryTree(*project_MSP, *engine_plugin_content,false);
-		}
-		else if (FPaths::DirectoryExists(project_plugin_content))
-		{
-			PlatformFile.CopyDirectoryTree(*project_MSP, *project_plugin_content, false);
-		}
+		const FString project_MSP = FPaths::Combine(FPaths::ProjectContentDir(), L"MSPresets");
+		FString pluginpath= FModuleManager::Get().GetModuleFilename("MegascansPlugin");
+		pluginpath = pluginpath.Replace(*FString("Binaries/Win64/UnrealEditor-MegascansPlugin.dll"),*FString("Content/MSPresets"));
+		FPlatformFileManager::Get().GetPlatformFile().CopyDirectoryTree(*project_MSP,*pluginpath,true);
 	}
 
 	virtual void ShutdownModule() override
