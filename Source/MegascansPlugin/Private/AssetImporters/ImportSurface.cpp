@@ -153,10 +153,13 @@ TArray<TMap<FString, TextureData>> FImportSurface::ImportTextureMaps(TSharedPtr<
 		TextureImportData.TextureAsset->SetFlags(RF_Standalone);
 		TextureImportData.TextureAsset->MarkPackageDirty();
 		TextureImportData.TextureAsset->PostEditChange();
+		/*
+		* 打开虚拟纹理后在此处会报告一个未知错误
 		if (AssetImportData->AssetMetaInfo->bSavePackages)
 		{
 			AssetUtils::SavePackage(TextureImportData.TextureAsset);
 		}
+		*/
 		TextureMaps.Add(TextureType, TextureImportData);
 		TextureMapsList.Add(TextureMaps);
 
